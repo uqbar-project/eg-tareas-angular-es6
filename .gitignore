@@ -1,0 +1,8 @@
+.classpath
+.project
+.settings/
+/bin/
+*generated*
+/target/
+*node_modules*
+xtend-gen*
