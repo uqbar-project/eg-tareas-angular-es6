@@ -12,7 +12,7 @@ const asignarTarea = {
             this.asignatariosPosibles = response.data
           }, () => {
             notificarError(this)
-          });
+          })
         }
     },
     templateUrl: '/templates/asignarTarea.html'

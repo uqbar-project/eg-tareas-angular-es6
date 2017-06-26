@@ -43,7 +43,7 @@ class TareasController {
   // Se produce la asignación propiamente dicha
   asignar(asignatario) {
 	  this.tareaSeleccionada.asignadoA = asignatario
-    tareaService.update(
+    this.tareaService.update(
       this.tareaSeleccionada, 
       () => { }, 
       (message) => { notificarError(this, message) }
