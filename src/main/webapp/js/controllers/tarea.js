@@ -1,5 +1,5 @@
 class TareasController {
-
+  
   constructor(tareaService, $timeout) {
       this.tareaService = tareaService
       this.$timeout = $timeout
@@ -7,11 +7,6 @@ class TareasController {
       this.tareas = []
       this.tareaSeleccionada = null
       this.getTareas()
-  }
-
-  notificarErrorTareas(infoError) {
-  	this.notificarError(this, infoError)
-  	this.getTareas()
   }
 
   transformarATarea(jsonTarea) {
@@ -22,17 +17,21 @@ class TareasController {
   getTareas() {
     this.tareaService.findAll((response) => {
       this.tareas = _.map(response.data, this.transformarATarea)
-    }, () => {
-    	notificarError(this)
-    })
+    }, (message) => { notificarError(this, message) })
   }
 
   // CUMPLIR TAREA
   cumplir(tarea) {
     tarea.cumplir()
-    this.tareaService.update(tarea, () => {
-      this.getTareas()
-    }, notificarErrorTareas)
+    this.tareaService.update(tarea, 
+      () => {
+        this.getTareas()
+      }, 
+      (message) => { 
+        notificarError(this, message) 
+        this.getTareas()
+      }
+    )
   }
 
   // FUNCIONES PARA ASIGNAR
@@ -44,7 +43,11 @@ class TareasController {
   // Se produce la asignación propiamente dicha
   asignar(asignatario) {
 	  this.tareaSeleccionada.asignadoA = asignatario
-    tareaService.update(this.tareaSeleccionada, () => { }, notificarError);
+    tareaService.update(
+      this.tareaSeleccionada, 
+      () => { }, 
+      (message) => { notificarError(this, message) }
+    )
   }
 
 

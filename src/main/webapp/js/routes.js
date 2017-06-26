@@ -1,4 +1,4 @@
-app.config(function ($stateProvider, $urlRouterProvider) {
+const routes = ($stateProvider, $urlRouterProvider) => {
 
   $urlRouterProvider.otherwise("/tareas");
 
@@ -10,4 +10,4 @@ app.config(function ($stateProvider, $urlRouterProvider) {
       data: {},
       resolve: {}
     })
-});
+}
