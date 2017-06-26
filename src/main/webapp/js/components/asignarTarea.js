@@ -10,8 +10,8 @@ const asignarTarea = {
           this.asignatariosPosibles = []
           usuariosService.findAll((response) => {
             this.asignatariosPosibles = response.data
-          }, () => {
-            notificarError(this)
+          }, (message) => {
+            notificarError(this, message)
           })
         }
     },
