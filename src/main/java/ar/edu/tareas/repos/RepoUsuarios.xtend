@@ -19,8 +19,9 @@ class RepoUsuarios extends CollectionBasedRepo<Usuario> {
 	new() {
 		this.create(new Usuario("Fernando Dodino"))
 		this.create(new Usuario("Rodrigo Grisolia"))
-		this.create(new Usuario("Javier Casaubon"))
-		this.create(new Usuario("Marcos Pavelek"))
+		this.create(new Usuario("Dario Grinberg"))
+		this.create(new Usuario("Juan Contardo"))
+		this.create(new Usuario("Nahuel Palumbo"))
 	}
 
 	override createExample() {
@@ -35,10 +36,14 @@ class RepoUsuarios extends CollectionBasedRepo<Usuario> {
 		new Predicate<Usuario> {
 
 			override evaluate(Usuario usuario) {
-				usuario.nombre.contains(example.nombre)
+				usuario.nombre.toUpperCase.contains(example.nombre.toUpperCase)
 			}
 
 		}
+	}
+	
+	def getAsignatario(String nombreAsignatario) {
+		searchByExample(new Usuario(nombreAsignatario))?.head
 	}
 
 }
