@@ -3,7 +3,7 @@ package ar.edu.tareas.controller
 import ar.edu.tareas.domain.Tarea
 import ar.edu.tareas.repos.RepoTareas
 import ar.edu.tareas.repos.RepoUsuarios
-import org.uqbar.commons.model.UserException
+import org.uqbar.commons.model.exceptions.UserException
 import org.uqbar.xtrest.api.Result
 import org.uqbar.xtrest.api.XTRest
 import org.uqbar.xtrest.api.annotation.Body
@@ -12,13 +12,11 @@ import org.uqbar.xtrest.api.annotation.Get
 import org.uqbar.xtrest.api.annotation.Put
 import org.uqbar.xtrest.http.ContentType
 import org.uqbar.xtrest.json.JSONUtils
-import ar.edu.tareas.xtrest.JSONPropertyUtils
 
 @Controller
 class TareasController {
 
 	extension JSONUtils = new JSONUtils
-	extension JSONPropertyUtils = new JSONPropertyUtils
 
 	@Get("/tareas")
 	def Result tareas() {
@@ -29,17 +27,19 @@ class TareasController {
 
 	@Get('/tareas/:id')
 	def Result tarea() {
-		response.contentType = "application/json"
+		response.contentType = ContentType.APPLICATION_JSON
 		val iId = Integer.valueOf(id)
 		try {
 			ok(RepoTareas.instance.searchById(iId).toJson)
 		} catch (UserException e) {
-			notFound("No existe la tarea con id " + id + "");
+			notFound("No existe la tarea con id " + id + "")
 		}
 	}
 
+	// Ojo con el parámetro, debe decir exactamente descripcion
 	@Get('/tareas/search')
 	def Result buscar(String descripcion) {
+		response.contentType = ContentType.APPLICATION_JSON
 		val tareaBusqueda = new Tarea
 		tareaBusqueda.descripcion = descripcion
 		ok(RepoTareas.instance.searchByExample(tareaBusqueda).toJson)
@@ -52,7 +52,7 @@ class TareasController {
 			val actualizado = body.fromJson(Tarea)
 
 			val asignadoA = body.getPropertyValue("asignadoA")
-			val asignatario = RepoUsuarios.instance.allInstances.findFirst[it.nombre.equalsIgnoreCase(asignadoA)]
+			val asignatario = RepoUsuarios.instance.getAsignatario(asignadoA)
 			actualizado.asignarA(asignatario)
 
 			if (Integer.parseInt(id) != actualizado.id) {
@@ -66,15 +66,8 @@ class TareasController {
 		}
 	}
 
-	@Get("/usuarios")
-	def Result usuarios() {
-		val usuarios = RepoUsuarios.instance.allInstances
-		response.contentType = ContentType.APPLICATION_JSON
-		ok(usuarios.toJson)
-	}
-
 	def static void main(String[] args) {
-		XTRest.start(TareasController, 9000)
+		XTRest.start(9000, UsuariosController, TareasController)
 	}
 
 }

@@ -1,7 +1,6 @@
 package ar.edu.tareas.repos
 
 import ar.edu.tareas.domain.Tarea
-import ar.edu.tareas.domain.Usuario
 import java.util.Date
 import org.apache.commons.collections15.Predicate
 import org.uqbar.commons.model.CollectionBasedRepo
@@ -14,15 +13,15 @@ class RepoTareas extends CollectionBasedRepo<Tarea> {
 	static RepoTareas repoTareas
 
 	def static RepoTareas getInstance() {
-		if (RepoTareas.repoTareas == null) {
-			RepoTareas.repoTareas = new RepoTareas
+		if (repoTareas == null) {
+			repoTareas = new RepoTareas
 		}
-		RepoTareas.repoTareas
+		repoTareas
 	}
 
 	private new() {
 		repoUsuario = RepoUsuarios.instance
-		this.crearTarea("Desarrollar componente de envio de mails", "Marcos Pavelek", new Date(), "Iteración 1", 0)
+		this.crearTarea("Desarrollar componente de envio de mails", "Juan Contardo", new Date(), "Iteración 1", 0)
 		this.crearTarea("Implementar single sign on desde la extranet", null, new Date(9, 9, 114), "Iteración 1", 76)
 		this.crearTarea("Cancelar pedidos que esten pendientes desde hace 2 meses", "Rodrigo Grisolia", new Date(3, 2, 115),
 			"Iteración 1", 22)
@@ -32,7 +31,7 @@ class RepoTareas extends CollectionBasedRepo<Tarea> {
 	def crearTarea(String unaDescripcion, String responsable, Date date, String unaIteracion, int cumplimiento) {
 		new Tarea => [
 			if (responsable != null) {
-				asignatario = repoUsuario.searchByExample(new Usuario(responsable)).get(0)
+				asignatario = repoUsuario.getAsignatario(responsable)
 			}
 			descripcion = unaDescripcion
 			if (date == null) {
@@ -50,7 +49,7 @@ class RepoTareas extends CollectionBasedRepo<Tarea> {
 		new Predicate<Tarea> {
 
 			override evaluate(Tarea tarea) {
-				example.descripcion.contains(tarea.descripcion)
+				example.descripcion === null || tarea?.descripcion.toUpperCase.contains(example.descripcion?.toUpperCase)
 			}
 
 		}

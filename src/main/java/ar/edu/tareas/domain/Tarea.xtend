@@ -2,13 +2,11 @@ package ar.edu.tareas.domain
 
 import ar.edu.tareas.errors.BusinessException
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Date
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.uqbar.commons.model.Entity
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 @Accessors
 class Tarea extends Entity {
 	static int TAREA_COMPLETA = 100
