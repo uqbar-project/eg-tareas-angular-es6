@@ -15,32 +15,6 @@ class TareasController {
 
 	extension JSONUtils = new JSONUtils
 
-	@Get("/tareas")
-	def Result tareas() {
-		val tareas = RepoTareas.instance.allInstances //tareasPendientes
-		response.contentType = ContentType.APPLICATION_JSON
-		ok(tareas.toJson)
-	}
-
-	@Get('/tareas/:id')
-	def Result tarea() {
-		response.contentType = ContentType.APPLICATION_JSON
-		val iId = Integer.valueOf(id)
-		try {
-			ok(RepoTareas.instance.searchById(iId).toJson)
-		} catch (UserException e) {
-			notFound("No existe la tarea con id " + id + "");
-		}
-	}
-
-	@Get('/tareas/search')
-	def Result buscar(String descripcion) {
-		response.contentType = ContentType.APPLICATION_JSON
-		val tareaBusqueda = new Tarea
-		tareaBusqueda.descripcion = descripcion
-		ok(RepoTareas.instance.searchByExample(tareaBusqueda).toJson)
-	}
-
 	def static void main(String[] args) {
 		XTRest.start(9000, TareasController)
 	}
