@@ -43,6 +43,7 @@ class RepoUsuarios extends CollectionBasedRepo<Usuario> {
 	}
 	
 	def getAsignatario(String nombreAsignatario) {
+		if (nombreAsignatario === null || nombreAsignatario.trim.equals("")) return null
 		searchByExample(new Usuario(nombreAsignatario))?.head
 	}
 
